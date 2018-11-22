@@ -26,33 +26,33 @@ mantendo o nome das colunas do arquivo.
 ------------------------------------ Métodos ------------------------------------------
 
 /meanaveragemoviesofactor/<int:actor_id>
-  -Entrada: id do ator 
-  -Saída: Retorna a média das avaliações recebidas por filmes em que o ator participou
+  - Entrada: id do ator 
+  - Saída: Retorna a média das avaliações recebidas por filmes em que o ator participou
 
 /meanrevenuemoviesofactor/<int:actor_id>
-  -Entrada: id do ator 
-  -Saída: Retorna a média dos faturamentos obtidos por filmes em que o ator participou
+  - Entrada: id do ator 
+  - Saída: Retorna a média dos faturamentos obtidos por filmes em que o ator participou
 
 /meanaveragemoviesofdirector/<int:director_id>
-  -Entrada: id do diretor 
-  -Saída: Retorna a média das avaliações recebidas por filmes que foram dirigidos pelo diretor
+  - Entrada: id do diretor 
+  - Saída: Retorna a média das avaliações recebidas por filmes que foram dirigidos pelo diretor
 
 /meanrevenuemoviesofdirector/<int:director_id>
-  -Entrada: id do diretor 
-  -Saída: Retorna a média dos faturamentos obtidos por filmes que foram dirigidos pelo diretor
+  - Entrada: id do diretor 
+  - Saída: Retorna a média dos faturamentos obtidos por filmes que foram dirigidos pelo diretor
 
 /meanprofitmoviesofdirector/<int:director_id>
-  -Entrada: id do diretor 
-  -Saída: Retorna a média dos lucros obtidos pelos filmes que foram dirigidos pelo diretor  
+  - Entrada: id do diretor 
+  - Saída: Retorna a média dos lucros obtidos pelos filmes que foram dirigidos pelo diretor  
   
 /popularityActors
-  -Entrada: não se aplica
-  -Saída:  Retorna o id, o nome e a soma da popularidade dos 10 atores mais populares, ou seja, os que obtiveram a maior soma de popularidade em filmes que participaram    
+  - Entrada: não se aplica
+  - Saída:  Retorna o id, o nome e a soma da popularidade dos 10 atores mais populares, ou seja, os que obtiveram a maior soma de popularidade em filmes que participaram    
 
 /bestprofitadpartnership
-  -Entrada: não se aplica
-  -Saída: Retorna o id do ator, o nome do ator, id do diretor, o nome do diretor e a soma dos lucro, da melhor parceria entre ator e diretor, ou seja a que obteve a maior soma de todos lucros dos filmes em que os dois participaram
+  - Entrada: não se aplica
+  - Saída: Retorna o id do ator, o nome do ator, id do diretor, o nome do diretor e a soma dos lucro, da melhor parceria entre ator e diretor, ou seja a que obteve a maior soma de todos lucros dos filmes em que os dois participaram
 
 /bestcriticalaapartnership
-  -Entrada: não se aplica
-  -Saída: Retorna o id do primeiro ator, o nome do primeiro ator, id do segundo ator, o nome do segundo ator, a média das avaliações obtidas por filmes em que os dois participaram simultaneamente e quantos filmes aturam juntos, da melhor parceria entre atores, ou seja, dentre as maiores médias de avaliações, as com maiores números de filmes
+  - Entrada: não se aplica
+  - Saída: Retorna o id do primeiro ator, o nome do primeiro ator, id do segundo ator, o nome do segundo ator, a média das avaliações obtidas por filmes em que os dois participaram simultaneamente e quantos filmes aturam juntos, da melhor parceria entre atores, ou seja, dentre as maiores médias de avaliações, as com maiores números de filmes
