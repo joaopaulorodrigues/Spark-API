@@ -35,8 +35,8 @@ dfpostgres = DataFrameReader(sqlContext).jdbc(
 
 #Entrada: id do ator 
 #Saída: Retorna a média das avaliações recebidas por filmes em que o ator participou
-@app.route('/meanaveragemoviesofactor/<int:actor_id>', methods=['GET'])
-def mean_average_movies_of_actor(actor_id):
+@app.route('/averagevotemoviesofactor/<int:actor_id>', methods=['GET'])
+def average_vote_movies_of_actor(actor_id):
     q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie) WHERE a.id= "' + str(actor_id)+'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
@@ -54,8 +54,8 @@ def mean_average_movies_of_actor(actor_id):
 
 #Entrada: id do ator 
 #Saída: Retorna a média dos faturamentos obtidos por filmes em que o ator participou
-@app.route('/meanrevenuemoviesofactor/<int:actor_id>', methods=['GET'])
-def mean_revenue_movies_of_actor(actor_id):
+@app.route('/averagerevenuemoviesofactor/<int:actor_id>', methods=['GET'])
+def average_revenue_movies_of_actor(actor_id):
     q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie) WHERE a.id= "' + str(actor_id)+'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
@@ -73,8 +73,8 @@ def mean_revenue_movies_of_actor(actor_id):
 
 #Entrada: id do diretor 
 #Saída: Retorna a média das avaliações recebidas por filmes que foram dirigidos pelo diretor
-@app.route('/meanaveragemoviesofdirector/<int:director_id>', methods=['GET'])
-def mean_average_movies_of_director(director_id):
+@app.route('/averagevotemoviesofdirector/<int:director_id>', methods=['GET'])
+def average_vote_movies_of_director(director_id):
     q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.id= "' + str(director_id)+'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
@@ -91,8 +91,8 @@ def mean_average_movies_of_director(director_id):
 
 #Entrada: id do diretor 
 #Saída: Retorna a média dos faturamentos obtidos por filmes que foram dirigidos pelo diretor
-@app.route('/meanrevenuemoviesofdirector/<int:director_id>', methods=['GET'])
-def mean_revenue_movies_of_director(director_id):
+@app.route('/averagerevenuemoviesofdirector/<int:director_id>', methods=['GET'])
+def average_revenue_movies_of_director(director_id):
     q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.id= "' + str(director_id)+'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
@@ -110,8 +110,8 @@ def mean_revenue_movies_of_director(director_id):
   
 #Entrada: id do diretor 
 #Saída: Retorna a média dos lucros obtidos pelos filmes que foram dirigidos pelo diretor    
-@app.route('/meanprofitmoviesofdirector/<int:director_id>', methods=['GET'])
-def mean_profit_movies_of_director(director_id):
+@app.route('/averageprofitmoviesofdirector/<int:director_id>', methods=['GET'])
+def average_profit_movies_of_director(director_id):
     q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.id= "' + str(director_id)+'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
