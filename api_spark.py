@@ -150,7 +150,7 @@ def popularityActors():
     
     mean = {}
     top10 = []
-    for i in range(0,9):
+    for i in range(0,10):
         mean["actor_id"] = popularity.rdd.map(tuple).take(10)[i][0]
         mean["name"] = popularity.rdd.map(tuple).take(10)[i][1]
         mean["popularity"] = popularity.rdd.map(tuple).take(10)[i][2]
