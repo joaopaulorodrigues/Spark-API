@@ -47,7 +47,7 @@ def average_vote_movies_of_actor(actor_name):
     mean["vote_average"] = dfj.rdd.map(tuple).take(1)[0][0]
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
-    #return q
+    
     
 @app.route('/averagerevenuemoviesofactor/<string:actor_name>', methods=['GET'])
 def average_revenue_movies_of_actor(actor_name):
