@@ -14,18 +14,15 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-#Configura a API
+
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-#conecta o Neo4J
 db = GraphDatabase("http://localhost:7474", username="neo4j", password = "admin")
 
-#cria o contexto do Spark e do SparkSQL
 sc = SparkContext(appName = "movies")
 sqlContext = sql.SQLContext(sc)
 
-#Conecta o PostegreSQL e transforma a tabela movie_metadata em um dataframe
 url = 'postgresql://localhost:5432/postgres'
 
 properties = {'user': 'postgres', 'password': 'postgres'}
@@ -33,11 +30,10 @@ dfpostgres = DataFrameReader(sqlContext).jdbc(
     url='jdbc:%s' % url, table='movie_metadata', properties=properties
 )
 
-#Entrada: id do ator 
-#Saída: Retorna a média das avaliações recebidas por filmes em que o ator participou
-@app.route('/averagevotemoviesofactor/<int:actor_id>', methods=['GET'])
-def average_vote_movies_of_actor(actor_id):
-    q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie) WHERE a.id= "' + str(actor_id)+'" RETURN m.imdbId'
+
+@app.route('/averagevotemoviesofactor/<string:actor_name>', methods=['GET'])
+def average_vote_movies_of_actor(actor_name):
+    q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie) WHERE a.name= "' + actor_name+'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
     
@@ -51,12 +47,11 @@ def average_vote_movies_of_actor(actor_id):
     mean["vote_average"] = dfj.rdd.map(tuple).take(1)[0][0]
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
-
-#Entrada: id do ator 
-#Saída: Retorna a média dos faturamentos obtidos por filmes em que o ator participou
-@app.route('/averagerevenuemoviesofactor/<int:actor_id>', methods=['GET'])
-def average_revenue_movies_of_actor(actor_id):
-    q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie) WHERE a.id= "' + str(actor_id)+'" RETURN m.imdbId'
+    #return q
+    
+@app.route('/averagerevenuemoviesofactor/<string:actor_name>', methods=['GET'])
+def average_revenue_movies_of_actor(actor_name):
+    q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie) WHERE a.name= "' + actor_name +'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
     
@@ -71,11 +66,9 @@ def average_revenue_movies_of_actor(actor_id):
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
 
-#Entrada: id do diretor 
-#Saída: Retorna a média das avaliações recebidas por filmes que foram dirigidos pelo diretor
-@app.route('/averagevotemoviesofdirector/<int:director_id>', methods=['GET'])
-def average_vote_movies_of_director(director_id):
-    q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.id= "' + str(director_id)+'" RETURN m.imdbId'
+@app.route('/averagevotemoviesofdirector/<string:director_name>', methods=['GET'])
+def average_vote_movies_of_director(director_name):
+    q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.name= "' + director_name+'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
     schema = StructType([StructField('imdbId', StringType(), True),
@@ -89,11 +82,9 @@ def average_vote_movies_of_director(director_id):
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
 
-#Entrada: id do diretor 
-#Saída: Retorna a média dos faturamentos obtidos por filmes que foram dirigidos pelo diretor
-@app.route('/averagerevenuemoviesofdirector/<int:director_id>', methods=['GET'])
-def average_revenue_movies_of_director(director_id):
-    q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.id= "' + str(director_id)+'" RETURN m.imdbId'
+@app.route('/averagerevenuemoviesofdirector/<string:director_name>', methods=['GET'])
+def average_revenue_movies_of_director(director_name):
+    q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.name= "' + director_name +'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
     
@@ -108,11 +99,9 @@ def average_revenue_movies_of_director(director_id):
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
   
-#Entrada: id do diretor 
-#Saída: Retorna a média dos lucros obtidos pelos filmes que foram dirigidos pelo diretor    
-@app.route('/averageprofitmoviesofdirector/<int:director_id>', methods=['GET'])
-def average_profit_movies_of_director(director_id):
-    q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.id= "' + str(director_id)+'" RETURN m.imdbId'
+@app.route('/averageprofitmoviesofdirector/<string:director_name>', methods=['GET'])
+def average_profit_movies_of_director(director_name):
+    q = 'MATCH (a:Director)-[r:DIRECTED]->(m:Movie) WHERE a.name= "' + director_name +'" RETURN m.imdbId'
     results = db.query(q, returns=(str))
     rdd = sc.parallelize(results)
     schema = StructType([StructField('imdbId', StringType(), True),
@@ -129,8 +118,6 @@ def average_profit_movies_of_director(director_id):
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
 
-#Entrada: não se aplica
-#Saída:  Retorna o id, o nome e a soma da popularidade dos 10 atores mais populares, ou seja, os que obtiveram a maior soma de popularidade em filmes que participaram    
 @app.route('/popularityActors', methods=['GET'])
 def popularityActors():
     q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie) RETURN m.imdbId, a.id, a.name'
@@ -159,8 +146,6 @@ def popularityActors():
         
     return json.dumps(top10, indent=4, separators=(',', ': '))
 
-#Entrada: não se aplica
-#Saída: Retorna o id do ator, o nome do ator, id do diretor, o nome do diretor e a soma dos lucro, da melhor parceria entre ator e diretor, ou seja a que obteve a maior soma de todos lucros dos filmes em que os dois participaram
 @app.route('/bestprofitadpartnership', methods=['GET'])
 def best_profit_ad_partnership():
     q = 'MATCH (a:Actor)-[r:ACTS_IN]->(m:Movie)<-[:DIRECTED]-(b:Director) RETURN m.imdbId, a.name, a.id, b.id, b.name'
@@ -187,8 +172,6 @@ def best_profit_ad_partnership():
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
     
-#Entrada: não se aplica
-#Saída: Retorna o id do primeiro ator, o nome do primeiro ator, id do segundo ator, o nome do segundo ator, a média das avaliações obtidas por filmes em que os dois participaram simultaneamente e quantos filmes aturam juntos, da melhor parceria entre atores, ou seja, dentre as maiores médias de avaliações, as com maiores números de filmes
 @app.route('/bestcriticalaapartnership', methods=['GET'])
 def best_critical_aa_partnership():
     q = 'MATCH (a:Actor)-[:ACTS_IN]->(m:Movie)<-[:ACTS_IN]-(b:Actor) RETURN m.imdbId, a.name, a.id, b.id, b.name'
@@ -216,5 +199,4 @@ def best_critical_aa_partnership():
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
 
-#inicializa a API
 app.run()
