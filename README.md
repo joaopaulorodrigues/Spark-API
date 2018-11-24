@@ -25,24 +25,24 @@ mantendo o nome das colunas do arquivo.
 
 ------------------------------------ Métodos ------------------------------------------
 
-/meanaveragemoviesofactor/<int:actor_id>
-  - Entrada: id do ator 
+/meanaveragemoviesofactor/<int:actor_name>
+  - Entrada: nome do ator 
   - Saída: Retorna a média das avaliações recebidas por filmes em que o ator participou
 
-/meanrevenuemoviesofactor/<int:actor_id>
-  - Entrada: id do ator 
+/meanrevenuemoviesofactor/<int:actor_name>
+  - Entrada: nome do ator 
   - Saída: Retorna a média dos faturamentos obtidos por filmes em que o ator participou
 
-/meanaveragemoviesofdirector/<int:director_id>
-  - Entrada: id do diretor 
+/meanaveragemoviesofdirector/<int:director_name>
+  - Entrada: nome do diretor 
   - Saída: Retorna a média das avaliações recebidas por filmes que foram dirigidos pelo diretor
 
-/meanrevenuemoviesofdirector/<int:director_id>
-  - Entrada: id do diretor 
+/meanrevenuemoviesofdirector/<int:director_name>
+  - Entrada: nome do diretor 
   - Saída: Retorna a média dos faturamentos obtidos por filmes que foram dirigidos pelo diretor
 
-/meanprofitmoviesofdirector/<int:director_id>
-  - Entrada: id do diretor 
+/meanprofitmoviesofdirector/<int:director_name>
+  - Entrada: nome do diretor 
   - Saída: Retorna a média dos lucros obtidos pelos filmes que foram dirigidos pelo diretor  
   
 /popularityActors
