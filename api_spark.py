@@ -42,12 +42,12 @@ def average_vote_movies_of_actor(actor_name):
         
     df = sqlContext.createDataFrame(rdd, schema)
     dfj = df.join(dfpostgres, df.imdbId == dfpostgres.imdb_id)
-    dfj = dfj.agg({'vote_average': 'mean'})
+    dfj = dfj.agg({'vote_average': 'mean','imdbId': 'count'})
     mean = {}
-    mean["vote_average"] = dfj.rdd.map(tuple).take(1)[0][0]
-    
+    mean["vote_average"] = dfj.rdd.map(tuple).take(1)[0][1]
+    mean["count_movies"] = dfj.rdd.map(tuple).take(1)[0][0]
     return json.dumps(mean, indent=4, separators=(',', ': '))
-    
+
     
 @app.route('/averagerevenuemoviesofactor/<string:actor_name>', methods=['GET'])
 def average_revenue_movies_of_actor(actor_name):
@@ -60,9 +60,10 @@ def average_revenue_movies_of_actor(actor_name):
         
     df = sqlContext.createDataFrame(rdd, schema)
     dfj = df.join(dfpostgres, df.imdbId == dfpostgres.imdb_id)
-    dfj = dfj.agg({'revenue': 'mean'})
+    dfj = dfj.agg({'revenue': 'mean','imdbId': 'count'})
     mean = {}
     mean["revenue"] = dfj.rdd.map(tuple).take(1)[0][0]
+    mean["count_movies"] = dfj.rdd.map(tuple).take(1)[0][1]
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
 
@@ -76,10 +77,11 @@ def average_vote_movies_of_director(director_name):
         
     df = sqlContext.createDataFrame(rdd, schema)
     dfj = df.join(dfpostgres, df.imdbId == dfpostgres.imdb_id)
-    dfj = dfj.agg({'vote_average': 'mean'})
+    dfj = dfj.agg({'vote_average': 'mean','imdbId': 'count'})
     mean = {}
-    mean["vote_average"] = dfj.rdd.map(tuple).take(1)[0][0]
-    
+    mean["vote_average"] = dfj.rdd.map(tuple).take(1)[0][1]
+    mean["count_movies"] = dfj.rdd.map(tuple).take(1)[0][0]
+        
     return json.dumps(mean, indent=4, separators=(',', ': '))
 
 @app.route('/averagerevenuemoviesofdirector/<string:director_name>', methods=['GET'])
@@ -93,9 +95,11 @@ def average_revenue_movies_of_director(director_name):
         
     df = sqlContext.createDataFrame(rdd, schema)
     dfj = df.join(dfpostgres, df.imdbId == dfpostgres.imdb_id)
-    dfj = dfj.agg({'revenue': 'mean'})
+    dfj = dfj.agg({'revenue': 'mean','imdbId': 'count'})
     mean = {}
     mean["revenue"] = dfj.rdd.map(tuple).take(1)[0][0]
+    mean["count_movies"] = dfj.rdd.map(tuple).take(1)[0][1]
+    
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
   
@@ -109,12 +113,12 @@ def average_profit_movies_of_director(director_name):
         
     df = sqlContext.createDataFrame(rdd, schema)
     dfj = df.join(dfpostgres, df.imdbId == dfpostgres.imdb_id)
-    revenue = dfj.agg({'revenue': 'mean'})
-    budget = dfj.agg({'budget': 'mean'})
+    dfj = dfj.agg({'revenue': 'mean','imdbId': 'count','budget': 'mean'})
     mean = {}
-    mean["revenue"] = revenue.rdd.map(tuple).take(1)[0][0]
-    mean["budget"] = budget.rdd.map(tuple).take(1)[0][0]
+    mean["revenue"] = dfj.rdd.map(tuple).take(1)[0][0]
+    mean["budget"] = dfj.rdd.map(tuple).take(1)[0][2]
     mean["profit"] = mean["revenue"] - mean["budget"]
+    mean["count_movies"] = dfj.rdd.map(tuple).take(1)[0][1]
     
     return json.dumps(mean, indent=4, separators=(',', ': '))
 
